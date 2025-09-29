@@ -1,6 +1,6 @@
 # Mini API de Cadastro de Usuários — Pro
 
-Projeto organizado e pronto para enviar no processo seletivo. Inclui:
+Projeto organizado. Inclui:
 - Estrutura por camadas (routes / schemas / services / models / core)
 - Validação com Marshmallow
 - Documentação **OpenAPI + Swagger UI** disponível em `/docs/`
