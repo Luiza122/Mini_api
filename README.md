@@ -2,7 +2,7 @@
 
 API REST desenvolvida com **FastAPI** para gerenciamento de usuários, utilizando **SQLite** (arquivo local), **SQLAlchemy** como ORM e **Pydantic** para validação. Inclui documentação automática via **Swagger UI** e testes com **Pytest**.
 
-> **Compatibilidade com o enunciado:** o campo exigido como `data_criacao` no teste está implementado e exposto como **`created_at`** nesta API. É o mesmo **timestamp de criação**, apenas com nome em inglês.
+> O campo exigido como `data_criacao` no teste está implementado e exposto como **`created_at`** nesta API. É o mesmo **timestamp de criação**, apenas com nome em inglês.
 
 ---
 
@@ -226,4 +226,5 @@ Dúvidas ou sugestões?
 Abra uma issue ou envie um e-mail para **[luiza.macena2013@gmail.com](mailto:luiza.macena2013@gmail.com)**.
 
 Feito por **Luiza Macena** ✨
+
 
