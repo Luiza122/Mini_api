@@ -29,7 +29,7 @@ API REST desenvolvida com **FastAPI** para gerenciamento de usuários, utilizand
 1. **Clone o repositório**
 
 ```sh
-git clone <(https://github.com/Luiza122/Mini_api.git)>
+git clone https://github.com/Luiza122/Mini_api.git
 cd Mini_api
 ```
 
@@ -226,6 +226,7 @@ Dúvidas ou sugestões?
 Abra uma issue ou envie um e-mail para **[luiza.macena2013@gmail.com](mailto:luiza.macena2013@gmail.com)**.
 
 Feito por **Luiza Macena** ✨
+
 
 
 
