@@ -1,35 +1,39 @@
-from flask.views import MethodView
-from flask_smorest import Blueprint, abort
-from ..schemas.user import UsuarioCreateSchema, UsuarioSchema
-from ..services.user_service import criar_usuario, listar_usuarios, buscar_usuario_por_id
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.orm import Session
+from typing import List
 
-blp = Blueprint("usuarios", __name__, url_prefix="/usuarios", description="Operações de usuários")
+from app.core.database import get_db
+from app.schemas.user import UserCreate, UserResponse, UserUpdate
+from app.services.user_service import UserService
 
-@blp.route("")
-class UsuariosListResource(MethodView):
+router = APIRouter(prefix="/usuarios", tags=["usuarios"])
 
-    @blp.response(200, UsuarioSchema(many=True))
-    def get(self):
-        """Listar todos os usuários"""
-        return [u.to_dict() for u in listar_usuarios()]
+@router.post("/", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
+def create_user(user: UserCreate, db: Session = Depends(get_db)):
+    return UserService.create_user(db=db, user=user)
 
-    @blp.arguments(UsuarioCreateSchema)
-    @blp.response(201, UsuarioSchema)
-    def post(self, dados):
-        """Criar um novo usuário"""
-        try:
-            u = criar_usuario(dados["nome"], dados["email"])
-            return u.to_dict()
-        except ValueError as e:
-            abort(409, message=str(e))
+@router.get("/", response_model=List[UserResponse])
+def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    users = UserService.get_users(db, skip=skip, limit=limit)
+    return users
 
-@blp.route("/<int:usuario_id>")
-class UsuarioResource(MethodView):
+@router.get("/{user_id}", response_model=UserResponse)
+def read_user(user_id: int, db: Session = Depends(get_db)):
+    db_user = UserService.get_user(db, user_id=user_id)
+    if db_user is None:
+        raise HTTPException(status_code=404, detail="Usuário não encontrado")
+    return db_user
 
-    @blp.response(200, UsuarioSchema)
-    def get(self, usuario_id):
-        """Buscar usuário por ID"""
-        u = buscar_usuario_por_id(usuario_id)
-        if not u:
-            abort(404, message="Usuário não encontrado.")
-        return u.to_dict()
+@router.put("/{user_id}", response_model=UserResponse)
+def update_user(user_id: int, user: UserUpdate, db: Session = Depends(get_db)):
+    db_user = UserService.update_user(db, user_id=user_id, user_update=user)
+    if db_user is None:
+        raise HTTPException(status_code=404, detail="Usuário não encontrado")
+    return db_user
+
+@router.delete("/{user_id}")
+def delete_user(user_id: int, db: Session = Depends(get_db)):
+    success = UserService.delete_user(db, user_id=user_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Usuário não encontrado")
+    return {"message": "Usuário deletado com sucesso"}

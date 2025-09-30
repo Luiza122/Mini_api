@@ -1,12 +1,22 @@
+from pydantic import BaseModel, EmailStr
+from datetime import datetime
+from typing import Optional
 
-from marshmallow import Schema, fields, validate
+class UserBase(BaseModel):
+    nome: str
+    email: EmailStr
 
-class UsuarioCreateSchema(Schema):
-    nome = fields.Str(required=True, validate=validate.Length(min=2, max=120))
-    email = fields.Email(required=True)
+class UserCreate(UserBase):
+    pass
 
-class UsuarioSchema(Schema):
-    id = fields.Int(dump_only=True)
-    nome = fields.Str()
-    email = fields.Email()
-    data_criacao = fields.DateTime()
+class UserUpdate(BaseModel):
+    nome: Optional[str] = None
+    email: Optional[EmailStr] = None
+
+class UserResponse(UserBase):
+    id: int
+    created_at: datetime
+    updated_at: Optional[datetime] = None
+    
+    class Config:
+        from_attributes = True

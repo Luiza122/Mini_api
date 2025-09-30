@@ -1,9 +1,11 @@
+version: '3.8'
+
 services:
   api:
     build: .
     ports:
-      - "5000:5000"
+      - "8000:8000"
     environment:
-      - DATABASE_URL=sqlite:////app/instance/usuarios.db
+      - DEBUG=True
     volumes:
-      - ./instance:/app/instance
+      - ./usuarios.db:/app/usuarios.db

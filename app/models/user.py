@@ -1,17 +1,12 @@
-from datetime import datetime, timezone
-from ..core.extensions import db
+from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy.sql import func
+from app.core.database import Base
 
-class Usuario(db.Model):
-    __tablename__ = "usuarios"
-    id = db.Column(db.Integer, primary_key=True)
-    nome = db.Column(db.String(120), nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    data_criacao = db.Column(db.DateTime, server_default=db.func.now())
-
-    def to_dict(self):
-        return {
-            "id": self.id,
-            "nome": self.nome,
-            "email": self.email,
-            "data_criacao": self.data_criacao.isoformat() if self.data_criacao else None
-        }
+class User(Base):
+    __tablename__ = "users"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    nome = Column(String(100), nullable=False)
+    email = Column(String(100), unique=True, index=True, nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())

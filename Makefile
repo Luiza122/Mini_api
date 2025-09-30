@@ -1,14 +1,21 @@
-
-.PHONY: run test install docker
-
-install:
-	python -m venv .venv && . .venv/bin/activate && pip install -r requirements.txt
+.PHONY: run test docker-build docker-run clean
 
 run:
-	flask --app app run
+	uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
 test:
-	pytest -q
+	pytest -v
 
-docker:
+docker-build:
 	docker build -t miniapi-usuarios .
+
+docker-run:
+	docker run -p 8000:8000 miniapi-usuarios
+
+clean:
+	find . -type d -name "__pycache__" -exec rm -rf {} +
+	find . -type f -name "*.pyc" -delete
+	rm -f usuarios.db
+
+install:
+	pip install -r requirements.txt
